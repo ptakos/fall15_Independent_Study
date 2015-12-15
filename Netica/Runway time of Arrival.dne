@@ -1,0 +1,1009 @@
+// ~->[DNET-1]->~
+
+// File created by an unlicensed user using Netica 5.18 on Dec 15, 2015 at 11:41:52.
+
+bnet Runaway_time_of_Arrival {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+comment = "\n\
+	Chest Clinic                                  Text Copyright 1998-2006 Norsys Software Corp.\n\n\
+	This Bayes net is also known as \"Asia\", and is an example which is popular \n\
+	for introducing Bayes nets.  It is from Lauritzen&Spiegelhalter88 (see below).\n\
+	It is for example purposes only, and should not be used for real decision making.\n\n\
+	It is a simplified version of a net that could be used to diagnose patients arriving\n\
+	at a clinic.  Each node in the net corresponds to some condition of the patient,\n\
+	for example, \"Visit to Asia\" indicates whether the patient recently visited Asia.\n\
+	To diagnose a patient, values are entered for nodes when they are known.  \n\
+	Netica then automatically re-calculates the probabilities for all the other nodes,\n\
+	based on the relationships between them.  The links between the nodes indicate how the\n\
+	relationships between the nodes are structured.\n\n\
+	The two top nodes are for predispositions which influence the likelihood of the diseases. \n\
+	Those diseases appear in the row below them.  At the bottom are symptoms of the diseases.\n\
+	To a large degree, the links of the network correspond to causation.  \n\
+	This is a common structure for diagnostic networks: predisposition nodes at the top, \n\
+	with links to nodes representing internal conditions and failure states, which in turn have\n\
+	links to nodes for observables.  Often there are many layers of nodes representing\n\
+	internal conditions, with links between them representing their complex inter-relationships.\n\n\
+	This net is from Lauritzen, Steffen L. and David J. Spiegelhalter (1988) \"Local \n\
+	computations with probabilities on graphical structures and their application to expert \n\
+	systems\" in Journal Royal Statistics Society B, 50(2), 157-194.\n\n\n\
+	TUTORIAL:            Basic Probabilistic Inference\n\
+	--------\n\n\
+	Keep in mind when doing tutorials that there is a great deal of assitance available\n\
+	from Netica's onscreen help, often about the exact networks of the tutorials.\n\
+	For this example, choose Help->Contents/Index, click on the Index tab, type in\n\
+	\"Chest Clinic\", and go to the example.\n\n\
+	All the information contained in a Bayes net can be observed by examining 3 things.\n\n\
+	First, there is the network structure, consisting of the nodes and their links,\n\
+	which you can see in the network diagram currently being displayed.\n\n\
+	Second, are the properties of each node, which you can see in their node dialog box,\n\
+	obtained by double-clicking on the node.\n\n\
+	Third, are the actual relationships between the nodes, which you can see by \n\
+	single-clicking on a node to select it, then choosing Table->View/Edit.  \n\
+	The relationship may be probabilistic or functional.  For example, click on \n\
+	\"Lung Cancer\", and then choose Table->View/Edit, to see its probabilistic relation \n\
+	with Smoking (the numbers are for example purposes only, and may not reflect reality).\n\
+	If you click on \"Tuberculosis or Cancer\", and choose Table->View/Edit, you can see\n\
+	its functional dependence on Tuberculosis and Lung Cancer.\n\n\
+	To compile the network for use, click on its window to make it the active window,\n\
+	and choose Network->Compile.  If that option is grayed-out, then it means that the\n\
+	net is already compiled (if there was some reason it couldn't compile, then the option\n\
+	would still be black and an error message would indicate the problem).  If the net is\n\
+	already compiled when you open it, that means that it was compiled when it was last\n\
+	saved to file.\n\n\
+	When compiled, the appropriate data structures for fast inference have been built \n\
+	internally.  The bars in each node have darkened, indicating that they and the \n\
+	numbers beside them are now valid data.  They indicate the probabilities of each \n\
+	state of the node.\n\n\
+	Suppose we want to \"diagnose\" a new patient.  When she first enters the clinic,\n\
+	without having any information about her, we believe she has lung cancer with a\n\
+	probability of 5.5%, as can be seen on the Lung Cancer node (the number may be higher\n\
+	than that for the general population, because something has led her to the chest clinic).\n\n\
+	If she has an abnormal x-ray, that information can be entered by clicking on the word\n\
+	\"abnormal\" of the \"XRay Result\" node (in a real-world Bayes net, you would probably\n\
+	be able to enter in exactly what way the x-ray was \"abnormal\").\n\n\
+	All the probability numbers and bars will change to take into account the finding.\n\
+	Now the probability that she has lung cancer has increased to 48.9%.\n\n\
+	If you further indicate that she has made a visit to asia recently, by clicking on\n\
+	\"visit\", the probability of lung cancer decreases to 37.1%, because the abnormal XRay is \n\
+	partially explained away by a greater chance of Tuberculosis (which she could \n\
+	catch in Asia).  Old fashioned medical expert systems had problems with this kind of \n\
+	reasoning, since each of the findings \"Abnormal XRay\" and \"Visit to Asia\" by themselves\n\
+	increase or leave the same the probability of lung cancer.\n\n\
+	You can try entering and changing some more findings.  To remove a finding, simply click\n\
+	on its name again.  If you want to remove all the findings (a new patient has just walked\n\
+	in), choose Network->Remove Findings (remember to click in the net window to make it\n\
+	the active window if you don't see the right menu).\n\n\n\n\
+	";
+whenchanged = 1450062859;
+
+visual V1 {
+	defdispform = BELIEFBARS;
+	nodelabeling = TITLE;
+	NodeMaxNumEntries = 50;
+	nodefont = font {shape= "Arial"; size= 14;};
+	linkfont = font {shape= "Arial"; size= 9;};
+	windowposn = (49, 23, 1074, 671);
+	scrollposn = (124, 0);
+	CommentWindowPosn = (0, 510, 845, 777);
+	resolution = 72;
+	magnification = 0.403226;
+	drawingbounds = (16062, 7803);
+	showpagebreaks = FALSE;
+	usegrid = TRUE;
+	gridspace = (6, 6);
+	NodeSet Node {BuiltIn = 1; Color = 0x00C0C0C0;};
+	NodeSet Nature {BuiltIn = 1; Color = 0x00F8EED2;};
+	NodeSet Deterministic {BuiltIn = 1; Color = 0x00D3CAA6;};
+	NodeSet Finding {BuiltIn = 1; Color = 0x00C8C8C8;};
+	NodeSet Constant {BuiltIn = 1; Color = 0x00FFFFFF;};
+	NodeSet ConstantValue {BuiltIn = 1; Color = 0x00FFFFB4;};
+	NodeSet Utility {BuiltIn = 1; Color = 0x00FFBDBD;};
+	NodeSet Decision {BuiltIn = 1; Color = 0x00DEE8FF;};
+	NodeSet Documentation {BuiltIn = 1; Color = 0x00F0FAFA;};
+	NodeSet ClearDocumentation {Color = 0x00FFFFFF;};
+	NodeSet Title {BuiltIn = 1; Color = 0x00FFFFFF;};
+	NodeSet Predispositions {Color = 0x00FFFED9;};
+	NodeSet Diseases {Color = 0x00FFE0C1;};
+	NodeSet Symptoms {Color = 0x00D6F5EA;};
+	NodeSet target {Disabled = 1; Color = 0x00C8C8C8;};
+	PrinterSetting A {
+		margins = (1270, 1270, 1270, 1270);
+		magnify = 1;
+		};
+	};
+
+node t {
+	kind = NATURE;
+	discrete = FALSE;
+	levels = (-30, 0, 30, 60, 90, INFINITY);
+	parents = ();
+	ExperBase = 1;
+	title = "Pre-pushback Process\nCompletion State";
+	whenchanged = 1449961738;
+	belief = (0.2, 0.2, 0.2, 0.2, 0.2);
+	visual V1 {
+		center = (1098, 120);
+		height = 9;
+		};
+	};
+
+node pt {
+	kind = NATURE;
+	discrete = FALSE;
+	chance = CHANCE;
+	levels = (0, 2, 4, 6, 8, 10);
+	parents = (t);
+	probs = 
+		// 0 to 2       2 to 4       4 to 6       6 to 8       8 to 10       // t        
+		  (0.001349612, 0.1573054,   0.6826899,   0.1573054,   0.001349612,  // -30 to 0 
+		   0.001349612, 0.1573054,   0.6826899,   0.1573054,   0.001349612,  // 0 to 30  
+		   0.001349612, 0.1573054,   0.6826899,   0.1573054,   0.001349612,  // 30 to 60 
+		   0.001349612, 0.1573054,   0.6826899,   0.1573054,   0.001349612,  // 60 to 90 
+		   0.001349612, 0.1573054,   0.6826899,   0.1573054,   0.001349612); // >= 90    ;
+	numcases = 10;
+	equation = "P(pt) = NormalDist (pt, 5, 1)";
+	title = "Pushback Time";
+	whenchanged = 1449979171;
+	belief = (0.001349612, 0.1573054, 0.6826899, 0.1573054, 0.001349612);
+	visual V1 {
+		center = (1098, 354);
+		height = 6;
+		};
+	};
+
+node dg {
+	kind = NATURE;
+	discrete = FALSE;
+	chance = CHANCE;
+	levels = (-15, 0, 15, INFINITY);
+	parents = ();
+	probs = 
+		// -15 to 0     0 to 15      >= 15        
+		  (0.02,        0.92,        0.06);
+	title = "Departure Gate";
+	whenchanged = 1449994889;
+	belief = (0.02, 0.92, 0.06);
+	visual V1 {
+		center = (630, 390);
+		height = 2;
+		};
+	};
+
+node pag {
+	kind = NATURE;
+	discrete = FALSE;
+	chance = CHANCE;
+	levels = (-15, 0, 15, INFINITY);
+	parents = ();
+	probs = 
+		// -15 to 0     0 to 15      >= 15        
+		  (0.02,        0.92,        0.06);
+	title = "Pushback Rates from\nAdjacent Gates";
+	whenchanged = 1449994946;
+	belief = (0.02, 0.92, 0.06);
+	visual V1 {
+		center = (1584, 354);
+		height = 1;
+		};
+	};
+
+node sat {
+	kind = NATURE;
+	discrete = FALSE;
+	chance = CHANCE;
+	levels = (-70, -55, -40, -25, -10, 5, 20, 35, 50, 65, 80, 95, 110, 125, INFINITY);
+	parents = (pt, dg, pag);
+	probs = 
+		// -70 to -55   -55 to -40   -40 to -25   -25 to -10   -10 to 5     5 to 20      20 to 35     35 to 50     50 to 65     65 to 80     80 to 95     95 to 110    110 to 125   >= 125        // pt      dg       pag      
+		  (0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 2  -15 to 0 -15 to 0 
+		   0,           0,           0,           0.1,         0.7,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 2  -15 to 0 0 to 15  
+		   0,           0,           0,           0,           0,           0.5,         0.4,         0.1,         0,           0,           0,           0,           0,           0,            // 0 to 2  -15 to 0 >= 15    
+		   0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 2  0 to 15  -15 to 0 
+		   0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,            // 0 to 2  0 to 15  0 to 15  
+		   0,           0,           0,           0,           0,           0,           0.6,         0.1,         0.2,         0.1,         0,           0,           0,           0,            // 0 to 2  0 to 15  >= 15    
+		   0,           0,           0,           0,           0,           0.6,         0.3,         0,           0.1,         0,           0,           0,           0,           0,            // 0 to 2  >= 15    -15 to 0 
+		   0,           0,           0,           0,           0,           0,           0.8,         0.1,         0,           0.1,         0,           0,           0,           0,            // 0 to 2  >= 15    0 to 15  
+		   0,           0,           0,           0,           0,           0,           0,           0.3,         0.3,         0.1,         0.2,         0.1,         0,           0,            // 0 to 2  >= 15    >= 15    
+		   0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 2 to 4  -15 to 0 -15 to 0 
+		   0,           0,           0,           0.1,         0.6,         0.3,         0,           0,           0,           0,           0,           0,           0,           0,            // 2 to 4  -15 to 0 0 to 15  
+		   0,           0,           0,           0,           0,           0.5,         0.3,         0,           0.1,         0.1,         0,           0,           0,           0,            // 2 to 4  -15 to 0 >= 15    
+		   0,           0,           0,           0.1,         0.5,         0.4,         0,           0,           0,           0,           0,           0,           0,           0,            // 2 to 4  0 to 15  -15 to 0 
+		   0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,            // 2 to 4  0 to 15  0 to 15  
+		   0,           0,           0,           0,           0,           0,           0.6,         0.3,         0.1,         0,           0,           0,           0,           0,            // 2 to 4  0 to 15  >= 15    
+		   0,           0,           0,           0,           0,           0.5,         0.3,         0.1,         0,           0,           0.1,         0,           0,           0,            // 2 to 4  >= 15    -15 to 0 
+		   0,           0,           0,           0,           0,           0,           0.7,         0.2,         0.1,         0,           0,           0,           0,           0,            // 2 to 4  >= 15    0 to 15  
+		   0,           0,           0,           0,           0,           0,           0,           0.1,         0.5,         0.3,         0.1,         0,           0,           0,            // 2 to 4  >= 15    >= 15    
+		   0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 4 to 6  -15 to 0 -15 to 0 
+		   0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,           0,           0,            // 4 to 6  -15 to 0 0 to 15  
+		   0,           0,           0,           0,           0,           0.5,         0.3,         0.1,         0,           0.1,         0,           0,           0,           0,            // 4 to 6  -15 to 0 >= 15    
+		   0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,            // 4 to 6  0 to 15  -15 to 0 
+		   0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,            // 4 to 6  0 to 15  0 to 15  
+		   0,           0,           0,           0,           0,           0,           0.3,         0.3,         0.1,         0.3,         0,           0,           0,           0,            // 4 to 6  0 to 15  >= 15    
+		   0,           0,           0,           0,           0,           0.5,         0.2,         0.2,         0.1,         0,           0,           0,           0,           0,            // 4 to 6  >= 15    -15 to 0 
+		   0,           0,           0,           0,           0,           0,           0.6,         0.3,         0.1,         0,           0,           0,           0,           0,            // 4 to 6  >= 15    0 to 15  
+		   0,           0,           0,           0,           0,           0,           0,           0.2,         0.1,         0.3,         0.2,         0.1,         0.1,         0,            // 4 to 6  >= 15    >= 15    
+		   0,           0,           0,           0,           1,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // 6 to 8  -15 to 0 -15 to 0 
+		   0,           0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,           0,           0,           0,           0,            // 6 to 8  -15 to 0 0 to 15  
+		   0,           0,           0,           0,           0,           0.3,         0.4,         0.2,         0,           0.1,         0,           0,           0,           0,            // 6 to 8  -15 to 0 >= 15    
+		   0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,            // 6 to 8  0 to 15  -15 to 0 
+		   0,           0,           0,           0,           0,           0.6,         0.3,         0.1,         0,           0,           0,           0,           0,           0,            // 6 to 8  0 to 15  0 to 15  
+		   0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,           0,           0,            // 6 to 8  0 to 15  >= 15    
+		   0,           0,           0,           0,           0,           0.2,         0.6,         0.1,         0.1,         0,           0,           0,           0,           0,            // 6 to 8  >= 15    -15 to 0 
+		   0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,           0,           0,            // 6 to 8  >= 15    0 to 15  
+		   0,           0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,           0,            // 6 to 8  >= 15    >= 15    
+		   0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 8 to 10 -15 to 0 -15 to 0 
+		   0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,           0,            // 8 to 10 -15 to 0 0 to 15  
+		   0,           0,           0,           0,           0,           0.4,         0.5,         0,           0.1,         0,           0,           0,           0,           0,            // 8 to 10 -15 to 0 >= 15    
+		   0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,            // 8 to 10 0 to 15  -15 to 0 
+		   0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,            // 8 to 10 0 to 15  0 to 15  
+		   0,           0,           0,           0,           0,           0,           0,           0.5,         0.3,         0.1,         0.1,         0,           0,           0,            // 8 to 10 0 to 15  >= 15    
+		   0,           0,           0,           0,           0,           0.4,         0.2,         0.4,         0,           0,           0,           0,           0,           0,            // 8 to 10 >= 15    -15 to 0 
+		   0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,           0,           0,           0,           0,            // 8 to 10 >= 15    0 to 15  
+		   0,           0,           0,           0,           0,           0,           0,           0.1,         0.4,         0.1,         0.2,         0.1,         0.1,         0);           // 8 to 10 >= 15    >= 15    ;
+	numcases = 10;
+	equation = "sat (dg, pt, pag) = (dg + pt + pag)";
+	title = "Spot Arrival Time";
+	whenchanged = 1450042528;
+	belief = (0, 0, 0, 7.414212e-4, 0.01748466, 0.429965, 0.476184, 0.05015293, 0.01199037, 0.01241217, 5.764366e-4, 2.467401e-4, 2.462542e-4, 0);
+	visual V1 {
+		center = (1098, 756);
+		height = 7;
+		};
+	};
+
+node as {
+	kind = NATURE;
+	discrete = FALSE;
+	chance = CHANCE;
+	levels = (-10, 0, 10, INFINITY);
+	parents = ();
+	probs = 
+		// -10 to 0     0 to 10      >= 10        
+		  (0.9,         0.09,        0.01);
+	title = "Adjacent Spot\nRates";
+	whenchanged = 1450052877;
+	belief = (0.9, 0.09, 0.01);
+	visual V1 {
+		center = (384, 780);
+		height = 4;
+		};
+	};
+
+node odt {
+	kind = NATURE;
+	discrete = FALSE;
+	chance = CHANCE;
+	levels = (-10, 0, 10, 20, INFINITY);
+	parents = ();
+	probs = 
+		// -10 to 0     0 to 10      10 to 20     >= 20        
+		  (0.02,        0.8,         0.16,        0.02);
+	title = "Opposite Direction\nTraffic Rates";
+	whenchanged = 1449998217;
+	belief = (0.02, 0.8, 0.16, 0.02);
+	visual V1 {
+		center = (726, 780);
+		height = 8;
+		};
+	};
+
+node drq {
+	kind = NATURE;
+	discrete = FALSE;
+	chance = CHANCE;
+	levels = (-10, 0, 10, 20, INFINITY);
+	parents = ();
+	probs = 
+		// -10 to 0     0 to 10      10 to 20     >= 20        
+		  (0.02,        0.8,         0.16,        0.02);
+	EqnDirty = TRUE;
+	title = "Departure Runway\nQueue Length at\nSpot Arrival Time";
+	whenchanged = 1450062859;
+	belief = (0.02, 0.8, 0.16, 0.02);
+	visual V1 {
+		center = (1542, 768);
+		height = 3;
+		};
+	};
+
+node rta {
+	kind = NATURE;
+	discrete = FALSE;
+	chance = CHANCE;
+	levels = (-100, -80, -60, -40, -20, 0, 20, 40, 60, 80, 100, 120, 140, 160, INFINITY);
+	parents = (as, odt, drq, sat);
+	probs = 
+		// -100 to -80  -80 to -60   -60 to -40   -40 to -20   -20 to 0     0 to 20      20 to 40     40 to 60     60 to 80     80 to 100    100 to 120   120 to 140   140 to 160   >= 160        // as       odt      drq      sat        
+		  (0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 -10 to 0 -70 to -55 
+		   0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 -10 to 0 -55 to -40 
+		   0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 -10 to 0 -40 to -25 
+		   0,           0,           0,           1,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 -10 to 0 -25 to -10 
+		   0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 -10 to 0 -10 to 5   
+		   0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 -10 to 0 5 to 20    
+		   0,           0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 -10 to 0 20 to 35   
+		   0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 -10 to 0 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 -10 to 0 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 -10 to 0 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,            // -10 to 0 -10 to 0 -10 to 0 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           1,           0,           0,           0,           0,            // -10 to 0 -10 to 0 -10 to 0 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,            // -10 to 0 -10 to 0 -10 to 0 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.3,         0.1,         0.1,          // -10 to 0 -10 to 0 -10 to 0 >= 125     
+		   0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 0 to 10  -70 to -55 
+		   0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 0 to 10  -55 to -40 
+		   0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 0 to 10  -40 to -25 
+		   0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 0 to 10  -25 to -10 
+		   0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 0 to 10  -10 to 5   
+		   0,           0,           0,           0,           0,           1,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 0 to 10  5 to 20    
+		   0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 0 to 10  20 to 35   
+		   0,           0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 0 to 10  35 to 50   
+		   0,           0,           0,           0,           0,           0,           0.1,         0.7,         0.2,         0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 0 to 10  50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,           0,           0,           0,            // -10 to 0 -10 to 0 0 to 10  65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,            // -10 to 0 -10 to 0 0 to 10  80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,            // -10 to 0 -10 to 0 0 to 10  95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,            // -10 to 0 -10 to 0 0 to 10  110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.8,         0,           0.1,          // -10 to 0 -10 to 0 0 to 10  >= 125     
+		   0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 10 to 20 -70 to -55 
+		   0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 10 to 20 -55 to -40 
+		   0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 10 to 20 -40 to -25 
+		   0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 10 to 20 -25 to -10 
+		   0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 10 to 20 -10 to 5   
+		   0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 10 to 20 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 10 to 20 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0.1,         0.8,         0.1,         0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 10 to 20 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 10 to 20 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,            // -10 to 0 -10 to 0 10 to 20 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           1,           0,           0,           0,           0,            // -10 to 0 -10 to 0 10 to 20 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,           0,            // -10 to 0 -10 to 0 10 to 20 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,            // -10 to 0 -10 to 0 10 to 20 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.8,         0.1,          // -10 to 0 -10 to 0 10 to 20 >= 125     
+		   0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 >= 20    -70 to -55 
+		   0,           0,           0,           1,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 >= 20    -55 to -40 
+		   0,           0,           0,           0.3,         0.6,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 >= 20    -40 to -25 
+		   0,           0,           0,           0,           0.5,         0.4,         0.1,         0,           0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 >= 20    -25 to -10 
+		   0,           0,           0,           0,           0.1,         0.6,         0.1,         0.2,         0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 >= 20    -10 to 5   
+		   0,           0,           0,           0,           0,           0.1,         0.8,         0.1,         0,           0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 >= 20    5 to 20    
+		   0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,           0,           0,           0,           0,            // -10 to 0 -10 to 0 >= 20    20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,           0,            // -10 to 0 -10 to 0 >= 20    35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,            // -10 to 0 -10 to 0 >= 20    50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.7,         0.2,         0,           0,           0,            // -10 to 0 -10 to 0 >= 20    65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.5,         0.3,         0,           0,            // -10 to 0 -10 to 0 >= 20    80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.5,         0.2,         0,            // -10 to 0 -10 to 0 >= 20    95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,          // -10 to 0 -10 to 0 >= 20    110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.4,         0.5,          // -10 to 0 -10 to 0 >= 20    >= 125     
+		   0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  -10 to 0 -70 to -55 
+		   0,           0.1,         0.9,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  -10 to 0 -55 to -40 
+		   0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  -10 to 0 -40 to -25 
+		   0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  -10 to 0 -25 to -10 
+		   0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  -10 to 0 -10 to 5   
+		   0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  -10 to 0 5 to 20    
+		   0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  -10 to 0 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  -10 to 0 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           1,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  -10 to 0 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,           0,           0,           0,            // -10 to 0 0 to 10  -10 to 0 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,            // -10 to 0 0 to 10  -10 to 0 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,            // -10 to 0 0 to 10  -10 to 0 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,            // -10 to 0 0 to 10  -10 to 0 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.6,         0,           0.2,          // -10 to 0 0 to 10  -10 to 0 >= 125     
+		   0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  0 to 10  -70 to -55 
+		   0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  0 to 10  -55 to -40 
+		   0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  0 to 10  -40 to -25 
+		   0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  0 to 10  -25 to -10 
+		   0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  0 to 10  -10 to 5   
+		   0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  0 to 10  5 to 20    
+		   0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  0 to 10  20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           1,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  0 to 10  35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,            // -10 to 0 0 to 10  0 to 10  50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,            // -10 to 0 0 to 10  0 to 10  65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,           0,           0,            // -10 to 0 0 to 10  0 to 10  80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,            // -10 to 0 0 to 10  0 to 10  95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,            // -10 to 0 0 to 10  0 to 10  110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.4,         0.2,          // -10 to 0 0 to 10  0 to 10  >= 125     
+		   0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  10 to 20 -70 to -55 
+		   0,           0,           0,           1,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  10 to 20 -55 to -40 
+		   0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  10 to 20 -40 to -25 
+		   0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  10 to 20 -25 to -10 
+		   0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  10 to 20 -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  10 to 20 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  10 to 20 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,            // -10 to 0 0 to 10  10 to 20 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,            // -10 to 0 0 to 10  10 to 20 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           1,           0,           0,           0,           0,            // -10 to 0 0 to 10  10 to 20 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,            // -10 to 0 0 to 10  10 to 20 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,            // -10 to 0 0 to 10  10 to 20 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,            // -10 to 0 0 to 10  10 to 20 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.2,         0.7,          // -10 to 0 0 to 10  10 to 20 >= 125     
+		   0,           0,           0.1,         0.7,         0.1,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  >= 20    -70 to -55 
+		   0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  >= 20    -55 to -40 
+		   0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  >= 20    -40 to -25 
+		   0,           0,           0,           0,           0.2,         0.5,         0.3,         0,           0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  >= 20    -25 to -10 
+		   0,           0,           0,           0,           0,           0.3,         0.6,         0.1,         0,           0,           0,           0,           0,           0,            // -10 to 0 0 to 10  >= 20    -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.2,         0.6,         0.2,         0,           0,           0,           0,           0,            // -10 to 0 0 to 10  >= 20    5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.6,         0.3,         0.1,         0,           0,           0,           0,            // -10 to 0 0 to 10  >= 20    20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.2,         0.6,         0.1,         0.1,         0,           0,           0,            // -10 to 0 0 to 10  >= 20    35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.3,         0.1,         0.1,         0,           0,            // -10 to 0 0 to 10  >= 20    50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.4,         0.2,         0,           0,            // -10 to 0 0 to 10  >= 20    65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.4,         0.1,         0,            // -10 to 0 0 to 10  >= 20    80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.5,         0.3,         0,            // -10 to 0 0 to 10  >= 20    95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.6,         0.1,          // -10 to 0 0 to 10  >= 20    110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,          // -10 to 0 0 to 10  >= 20    >= 125     
+		   0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 -10 to 0 -70 to -55 
+		   0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 -10 to 0 -55 to -40 
+		   0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 -10 to 0 -40 to -25 
+		   0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 -10 to 0 -25 to -10 
+		   0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 -10 to 0 -10 to 5   
+		   0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 -10 to 0 5 to 20    
+		   0,           0,           0,           0,           0,           0,           1,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 -10 to 0 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0.3,         0.6,         0.1,         0,           0,           0,           0,           0,            // -10 to 0 10 to 20 -10 to 0 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,            // -10 to 0 10 to 20 -10 to 0 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,            // -10 to 0 10 to 20 -10 to 0 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,            // -10 to 0 10 to 20 -10 to 0 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,            // -10 to 0 10 to 20 -10 to 0 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,            // -10 to 0 10 to 20 -10 to 0 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.3,         0.1,          // -10 to 0 10 to 20 -10 to 0 >= 125     
+		   0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 0 to 10  -70 to -55 
+		   0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 0 to 10  -55 to -40 
+		   0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 0 to 10  -40 to -25 
+		   0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 0 to 10  -25 to -10 
+		   0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 0 to 10  -10 to 5   
+		   0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 0 to 10  5 to 20    
+		   0,           0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 0 to 10  20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,            // -10 to 0 10 to 20 0 to 10  35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,            // -10 to 0 10 to 20 0 to 10  50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,            // -10 to 0 10 to 20 0 to 10  65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,            // -10 to 0 10 to 20 0 to 10  80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,            // -10 to 0 10 to 20 0 to 10  95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,            // -10 to 0 10 to 20 0 to 10  110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.5,         0.3,          // -10 to 0 10 to 20 0 to 10  >= 125     
+		   0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 10 to 20 -70 to -55 
+		   0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 10 to 20 -55 to -40 
+		   0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 10 to 20 -40 to -25 
+		   0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 10 to 20 -25 to -10 
+		   0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 10 to 20 -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 10 to 20 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,            // -10 to 0 10 to 20 10 to 20 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           1,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 10 to 20 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,            // -10 to 0 10 to 20 10 to 20 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,            // -10 to 0 10 to 20 10 to 20 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,            // -10 to 0 10 to 20 10 to 20 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.8,         0.1,         0,            // -10 to 0 10 to 20 10 to 20 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.8,         0,            // -10 to 0 10 to 20 10 to 20 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,          // -10 to 0 10 to 20 10 to 20 >= 125     
+		   0,           0,           0,           0.7,         0.2,         0,           0.1,         0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 >= 20    -70 to -55 
+		   0,           0,           0,           0,           0.7,         0.2,         0.1,         0,           0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 >= 20    -55 to -40 
+		   0,           0,           0,           0,           0.2,         0.7,         0,           0.1,         0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 >= 20    -40 to -25 
+		   0,           0,           0,           0,           0,           0.5,         0.4,         0.1,         0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 >= 20    -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,            // -10 to 0 10 to 20 >= 20    -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,            // -10 to 0 10 to 20 >= 20    5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.3,         0.4,         0.2,         0,           0.1,         0,           0,            // -10 to 0 10 to 20 >= 20    20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,            // -10 to 0 10 to 20 >= 20    35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,            // -10 to 0 10 to 20 >= 20    50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.6,         0.2,         0.1,         0,            // -10 to 0 10 to 20 >= 20    65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.6,         0.1,         0.1,          // -10 to 0 10 to 20 >= 20    80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.3,         0.1,          // -10 to 0 10 to 20 >= 20    95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,          // -10 to 0 10 to 20 >= 20    110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,          // -10 to 0 10 to 20 >= 20    >= 125     
+		   0,           0,           0.6,         0.3,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    -10 to 0 -70 to -55 
+		   0,           0,           0.1,         0.8,         0,           0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    -10 to 0 -55 to -40 
+		   0,           0,           0,           0.3,         0.5,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    -10 to 0 -40 to -25 
+		   0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    -10 to 0 -25 to -10 
+		   0,           0,           0,           0,           0.1,         0.6,         0.2,         0.1,         0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    -10 to 0 -10 to 5   
+		   0,           0,           0,           0,           0,           0.1,         0.7,         0.2,         0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    -10 to 0 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0.2,         0.7,         0,           0.1,         0,           0,           0,           0,            // -10 to 0 >= 20    -10 to 0 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,            // -10 to 0 >= 20    -10 to 0 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,            // -10 to 0 >= 20    -10 to 0 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.5,         0.2,         0,           0.1,         0,            // -10 to 0 >= 20    -10 to 0 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,            // -10 to 0 >= 20    -10 to 0 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.6,         0.1,         0,            // -10 to 0 >= 20    -10 to 0 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,         0,            // -10 to 0 >= 20    -10 to 0 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.4,         0.4,          // -10 to 0 >= 20    -10 to 0 >= 125     
+		   0,           0,           0.4,         0.5,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    0 to 10  -70 to -55 
+		   0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    0 to 10  -55 to -40 
+		   0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    0 to 10  -40 to -25 
+		   0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    0 to 10  -25 to -10 
+		   0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    0 to 10  -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.3,         0.5,         0.2,         0,           0,           0,           0,           0,            // -10 to 0 >= 20    0 to 10  5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.8,         0,           0.1,         0.1,         0,           0,           0,            // -10 to 0 >= 20    0 to 10  20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.2,         0.5,         0.2,         0.1,         0,           0,           0,            // -10 to 0 >= 20    0 to 10  35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,            // -10 to 0 >= 20    0 to 10  50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.6,         0.2,         0,           0,            // -10 to 0 >= 20    0 to 10  65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.3,         0.1,         0,            // -10 to 0 >= 20    0 to 10  80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,         0,           0,            // -10 to 0 >= 20    0 to 10  95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,          // -10 to 0 >= 20    0 to 10  110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,          // -10 to 0 >= 20    0 to 10  >= 125     
+		   0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    10 to 20 -70 to -55 
+		   0,           0,           0,           0,           0.6,         0.2,         0,           0.1,         0.1,         0,           0,           0,           0,           0,            // -10 to 0 >= 20    10 to 20 -55 to -40 
+		   0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    10 to 20 -40 to -25 
+		   0,           0,           0,           0,           0,           0.4,         0.4,         0.2,         0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    10 to 20 -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    10 to 20 -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,            // -10 to 0 >= 20    10 to 20 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.2,         0.6,         0.1,         0.1,         0,           0,           0,            // -10 to 0 >= 20    10 to 20 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,            // -10 to 0 >= 20    10 to 20 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.7,         0.2,         0,           0,           0,            // -10 to 0 >= 20    10 to 20 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,            // -10 to 0 >= 20    10 to 20 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,            // -10 to 0 >= 20    10 to 20 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,          // -10 to 0 >= 20    10 to 20 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,          // -10 to 0 >= 20    10 to 20 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,          // -10 to 0 >= 20    10 to 20 >= 125     
+		   0,           0,           0,           0.4,         0.5,         0,           0.1,         0,           0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    >= 20    -70 to -55 
+		   0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    >= 20    -55 to -40 
+		   0,           0,           0,           0,           0,           0.4,         0.4,         0.2,         0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    >= 20    -40 to -25 
+		   0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,           0,           0,           0,           0,           0,            // -10 to 0 >= 20    >= 20    -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0.3,         0.6,         0,           0.1,         0,           0,           0,           0,            // -10 to 0 >= 20    >= 20    -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0,           0.2,         0.6,         0.1,         0.1,         0,           0,           0,            // -10 to 0 >= 20    >= 20    5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,            // -10 to 0 >= 20    >= 20    20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.4,         0.4,         0.1,         0,           0,            // -10 to 0 >= 20    >= 20    35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.5,         0.3,         0.1,         0,            // -10 to 0 >= 20    >= 20    50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.3,         0.2,         0.1,          // -10 to 0 >= 20    >= 20    65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.3,         0.3,          // -10 to 0 >= 20    >= 20    80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,          // -10 to 0 >= 20    >= 20    95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,          // -10 to 0 >= 20    >= 20    110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // -10 to 0 >= 20    >= 20    >= 125     
+		   0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 -10 to 0 -70 to -55 
+		   0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 -10 to 0 -55 to -40 
+		   0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 -10 to 0 -40 to -25 
+		   0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 -10 to 0 -25 to -10 
+		   0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 -10 to 0 -10 to 5   
+		   0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 -10 to 0 5 to 20    
+		   0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 -10 to 0 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 -10 to 0 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 -10 to 0 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 -10 to 0 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,            // 0 to 10  -10 to 0 -10 to 0 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,            // 0 to 10  -10 to 0 -10 to 0 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,            // 0 to 10  -10 to 0 -10 to 0 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.7,         0.1,         0.1,          // 0 to 10  -10 to 0 -10 to 0 >= 125     
+		   0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 0 to 10  -70 to -55 
+		   0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 0 to 10  -55 to -40 
+		   0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 0 to 10  -40 to -25 
+		   0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 0 to 10  -25 to -10 
+		   0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 0 to 10  -10 to 5   
+		   0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 0 to 10  5 to 20    
+		   0,           0,           0,           0,           0,           0.1,         0.8,         0.1,         0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 0 to 10  20 to 35   
+		   0,           0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 0 to 10  35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 0 to 10  50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,            // 0 to 10  -10 to 0 0 to 10  65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,            // 0 to 10  -10 to 0 0 to 10  80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,            // 0 to 10  -10 to 0 0 to 10  95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,            // 0 to 10  -10 to 0 0 to 10  110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.6,         0.2,          // 0 to 10  -10 to 0 0 to 10  >= 125     
+		   0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 10 to 20 -70 to -55 
+		   0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 10 to 20 -55 to -40 
+		   0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 10 to 20 -40 to -25 
+		   0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 10 to 20 -25 to -10 
+		   0,           0,           0,           0,           0.1,         0.8,         0.1,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 10 to 20 -10 to 5   
+		   0,           0,           0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 10 to 20 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 10 to 20 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 10 to 20 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           1,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 10 to 20 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           1,           0,           0,           0,           0,            // 0 to 10  -10 to 0 10 to 20 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.8,         0.1,         0,           0,            // 0 to 10  -10 to 0 10 to 20 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,            // 0 to 10  -10 to 0 10 to 20 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,            // 0 to 10  -10 to 0 10 to 20 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.4,         0.5,          // 0 to 10  -10 to 0 10 to 20 >= 125     
+		   0,           0,           0.1,         0.5,         0.3,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 >= 20    -70 to -55 
+		   0,           0,           0,           0.6,         0.3,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 >= 20    -55 to -40 
+		   0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 >= 20    -40 to -25 
+		   0,           0,           0,           0,           0.2,         0.4,         0.3,         0.1,         0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 >= 20    -25 to -10 
+		   0,           0,           0,           0,           0,           0.1,         0.6,         0.3,         0,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 >= 20    -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.5,         0.3,         0,           0.2,         0,           0,           0,           0,            // 0 to 10  -10 to 0 >= 20    5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.5,         0.4,         0.1,         0,           0,           0,           0,            // 0 to 10  -10 to 0 >= 20    20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           1,           0,           0,           0,           0,           0,            // 0 to 10  -10 to 0 >= 20    35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,           0,           0,            // 0 to 10  -10 to 0 >= 20    50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,            // 0 to 10  -10 to 0 >= 20    65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,            // 0 to 10  -10 to 0 >= 20    80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.8,         0.1,         0,            // 0 to 10  -10 to 0 >= 20    95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.5,         0.4,          // 0 to 10  -10 to 0 >= 20    110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,          // 0 to 10  -10 to 0 >= 20    >= 125     
+		   0,           0.1,         0.9,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  -10 to 0 -70 to -55 
+		   0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  -10 to 0 -55 to -40 
+		   0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  -10 to 0 -40 to -25 
+		   0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  -10 to 0 -25 to -10 
+		   0,           0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  -10 to 0 -10 to 5   
+		   0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  -10 to 0 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  -10 to 0 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,            // 0 to 10  0 to 10  -10 to 0 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0.3,         0.6,         0.1,         0,           0,           0,           0,            // 0 to 10  0 to 10  -10 to 0 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,            // 0 to 10  0 to 10  -10 to 0 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,            // 0 to 10  0 to 10  -10 to 0 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,            // 0 to 10  0 to 10  -10 to 0 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,            // 0 to 10  0 to 10  -10 to 0 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,          // 0 to 10  0 to 10  -10 to 0 >= 125     
+		   0,           0,           1,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  0 to 10  -70 to -55 
+		   0,           0,           0.2,         0.7,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  0 to 10  -55 to -40 
+		   0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  0 to 10  -40 to -25 
+		   0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  0 to 10  -25 to -10 
+		   0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  0 to 10  -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  0 to 10  5 to 20    
+		   0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  0 to 10  20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,            // 0 to 10  0 to 10  0 to 10  35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           1,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  0 to 10  50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,            // 0 to 10  0 to 10  0 to 10  65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,            // 0 to 10  0 to 10  0 to 10  80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,            // 0 to 10  0 to 10  0 to 10  95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,            // 0 to 10  0 to 10  0 to 10  110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.4,         0.5,          // 0 to 10  0 to 10  0 to 10  >= 125     
+		   0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  10 to 20 -70 to -55 
+		   0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  10 to 20 -55 to -40 
+		   0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  10 to 20 -40 to -25 
+		   0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  10 to 20 -25 to -10 
+		   0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  10 to 20 -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  10 to 20 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,            // 0 to 10  0 to 10  10 to 20 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,           0,            // 0 to 10  0 to 10  10 to 20 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,            // 0 to 10  0 to 10  10 to 20 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,            // 0 to 10  0 to 10  10 to 20 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,            // 0 to 10  0 to 10  10 to 20 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,         0,           0,            // 0 to 10  0 to 10  10 to 20 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,            // 0 to 10  0 to 10  10 to 20 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,          // 0 to 10  0 to 10  10 to 20 >= 125     
+		   0,           0,           0,           0.6,         0.3,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  >= 20    -70 to -55 
+		   0,           0,           0,           0,           0.8,         0.1,         0.1,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  >= 20    -55 to -40 
+		   0,           0,           0,           0,           0.1,         0.8,         0.1,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  >= 20    -40 to -25 
+		   0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  0 to 10  >= 20    -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0.7,         0.2,         0.1,         0,           0,           0,           0,           0,            // 0 to 10  0 to 10  >= 20    -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.3,         0.6,         0.1,         0,           0,           0,           0,           0,            // 0 to 10  0 to 10  >= 20    5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,            // 0 to 10  0 to 10  >= 20    20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,           0,           0,            // 0 to 10  0 to 10  >= 20    35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.6,         0.3,         0,           0,           0,            // 0 to 10  0 to 10  >= 20    50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,            // 0 to 10  0 to 10  >= 20    65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.4,         0.2,         0.1,          // 0 to 10  0 to 10  >= 20    80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.6,         0.1,          // 0 to 10  0 to 10  >= 20    95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,          // 0 to 10  0 to 10  >= 20    110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,          // 0 to 10  0 to 10  >= 20    >= 125     
+		   0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 -10 to 0 -70 to -55 
+		   0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 -10 to 0 -55 to -40 
+		   0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 -10 to 0 -40 to -25 
+		   0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 -10 to 0 -25 to -10 
+		   0,           0,           0,           0,           0.1,         0.8,         0.1,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 -10 to 0 -10 to 5   
+		   0,           0,           0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 -10 to 0 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 -10 to 0 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,            // 0 to 10  10 to 20 -10 to 0 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,            // 0 to 10  10 to 20 -10 to 0 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           1,           0,           0,           0,           0,            // 0 to 10  10 to 20 -10 to 0 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,            // 0 to 10  10 to 20 -10 to 0 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,            // 0 to 10  10 to 20 -10 to 0 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,           0,           0,            // 0 to 10  10 to 20 -10 to 0 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.7,         0.2,          // 0 to 10  10 to 20 -10 to 0 >= 125     
+		   0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 0 to 10  -70 to -55 
+		   0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 0 to 10  -55 to -40 
+		   0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 0 to 10  -40 to -25 
+		   0,           0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 0 to 10  -25 to -10 
+		   0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 0 to 10  -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 0 to 10  5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,            // 0 to 10  10 to 20 0 to 10  20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,            // 0 to 10  10 to 20 0 to 10  35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,            // 0 to 10  10 to 20 0 to 10  50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,            // 0 to 10  10 to 20 0 to 10  65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.7,         0.2,         0,           0,            // 0 to 10  10 to 20 0 to 10  80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,            // 0 to 10  10 to 20 0 to 10  95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,            // 0 to 10  10 to 20 0 to 10  110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,          // 0 to 10  10 to 20 0 to 10  >= 125     
+		   0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 10 to 20 -70 to -55 
+		   0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 10 to 20 -55 to -40 
+		   0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 10 to 20 -40 to -25 
+		   0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 10 to 20 -25 to -10 
+		   0,           0,           0,           0,           0,           0,           1,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 10 to 20 -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0,           1,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 10 to 20 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.5,         0.4,         0.1,         0,           0,           0,           0,            // 0 to 10  10 to 20 10 to 20 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,            // 0 to 10  10 to 20 10 to 20 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,            // 0 to 10  10 to 20 10 to 20 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,         0,           0,           0,            // 0 to 10  10 to 20 10 to 20 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,            // 0 to 10  10 to 20 10 to 20 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,         0,            // 0 to 10  10 to 20 10 to 20 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,          // 0 to 10  10 to 20 10 to 20 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // 0 to 10  10 to 20 10 to 20 >= 125     
+		   0,           0,           0,           0.5,         0.4,         0,           0,           0.1,         0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 >= 20    -70 to -55 
+		   0,           0,           0,           0,           0.6,         0.1,         0.3,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 >= 20    -55 to -40 
+		   0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 >= 20    -40 to -25 
+		   0,           0,           0,           0,           0,           0.2,         0.6,         0.2,         0,           0,           0,           0,           0,           0,            // 0 to 10  10 to 20 >= 20    -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,            // 0 to 10  10 to 20 >= 20    -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,            // 0 to 10  10 to 20 >= 20    5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.1,         0.6,         0.2,         0.1,         0,           0,           0,            // 0 to 10  10 to 20 >= 20    20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,            // 0 to 10  10 to 20 >= 20    35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.5,         0.3,         0,           0,            // 0 to 10  10 to 20 >= 20    50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,            // 0 to 10  10 to 20 >= 20    65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,            // 0 to 10  10 to 20 >= 20    80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.7,         0.2,          // 0 to 10  10 to 20 >= 20    95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,          // 0 to 10  10 to 20 >= 20    110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // 0 to 10  10 to 20 >= 20    >= 125     
+		   0,           0,           0.3,         0.5,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    -10 to 0 -70 to -55 
+		   0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    -10 to 0 -55 to -40 
+		   0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    -10 to 0 -40 to -25 
+		   0,           0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    -10 to 0 -25 to -10 
+		   0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    -10 to 0 -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.3,         0.6,         0.1,         0,           0,           0,           0,           0,            // 0 to 10  >= 20    -10 to 0 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.7,         0.2,         0.1,         0,           0,           0,           0,            // 0 to 10  >= 20    -10 to 0 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,           0,            // 0 to 10  >= 20    -10 to 0 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.6,         0.1,         0,           0,           0,            // 0 to 10  >= 20    -10 to 0 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,            // 0 to 10  >= 20    -10 to 0 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.3,         0.1,         0,            // 0 to 10  >= 20    -10 to 0 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,            // 0 to 10  >= 20    -10 to 0 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,          // 0 to 10  >= 20    -10 to 0 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,          // 0 to 10  >= 20    -10 to 0 >= 125     
+		   0,           0,           0,           0.8,         0.1,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    0 to 10  -70 to -55 
+		   0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    0 to 10  -55 to -40 
+		   0,           0,           0,           0,           0.4,         0.4,         0.1,         0.1,         0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    0 to 10  -40 to -25 
+		   0,           0,           0,           0,           0,           0.5,         0.4,         0.1,         0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    0 to 10  -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    0 to 10  -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,            // 0 to 10  >= 20    0 to 10  5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.4,         0.4,         0.1,         0.1,         0,           0,           0,            // 0 to 10  >= 20    0 to 10  20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,            // 0 to 10  >= 20    0 to 10  35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,            // 0 to 10  >= 20    0 to 10  50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.5,         0.3,         0,           0,            // 0 to 10  >= 20    0 to 10  65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.8,         0.1,         0,            // 0 to 10  >= 20    0 to 10  80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,          // 0 to 10  >= 20    0 to 10  95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,          // 0 to 10  >= 20    0 to 10  110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,          // 0 to 10  >= 20    0 to 10  >= 125     
+		   0,           0,           0,           0.2,         0.7,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    10 to 20 -70 to -55 
+		   0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    10 to 20 -55 to -40 
+		   0,           0,           0,           0,           0.1,         0.7,         0.1,         0.1,         0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    10 to 20 -40 to -25 
+		   0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    10 to 20 -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,           0,           0,            // 0 to 10  >= 20    10 to 20 -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0,           0.3,         0.5,         0.2,         0,           0,           0,           0,            // 0 to 10  >= 20    10 to 20 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,            // 0 to 10  >= 20    10 to 20 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.5,         0.3,         0.1,         0,           0,            // 0 to 10  >= 20    10 to 20 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.4,         0.3,         0,           0,            // 0 to 10  >= 20    10 to 20 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,            // 0 to 10  >= 20    10 to 20 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.8,         0,            // 0 to 10  >= 20    10 to 20 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,          // 0 to 10  >= 20    10 to 20 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.8,          // 0 to 10  >= 20    10 to 20 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // 0 to 10  >= 20    10 to 20 >= 125     
+		   0,           0,           0,           0.1,         0.7,         0.1,         0.1,         0,           0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    >= 20    -70 to -55 
+		   0,           0,           0,           0,           0.1,         0.5,         0.2,         0.1,         0.1,         0,           0,           0,           0,           0,            // 0 to 10  >= 20    >= 20    -55 to -40 
+		   0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,           0,           0,           0,            // 0 to 10  >= 20    >= 20    -40 to -25 
+		   0,           0,           0,           0,           0,           0,           0.3,         0.6,         0,           0.1,         0,           0,           0,           0,            // 0 to 10  >= 20    >= 20    -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,            // 0 to 10  >= 20    >= 20    -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0,           0.1,         0.6,         0.3,         0,           0,           0,           0,            // 0 to 10  >= 20    >= 20    5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.3,         0.4,         0,           0,           0,            // 0 to 10  >= 20    >= 20    20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,           0,            // 0 to 10  >= 20    >= 20    35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,            // 0 to 10  >= 20    >= 20    50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0,           0.1,          // 0 to 10  >= 20    >= 20    65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.3,         0.5,          // 0 to 10  >= 20    >= 20    80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,          // 0 to 10  >= 20    >= 20    95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,          // 0 to 10  >= 20    >= 20    110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // 0 to 10  >= 20    >= 20    >= 125     
+		   0,           0.3,         0.6,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 -10 to 0 -70 to -55 
+		   0,           0,           0.4,         0.5,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 -10 to 0 -55 to -40 
+		   0,           0,           0,           0.7,         0.2,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 -10 to 0 -40 to -25 
+		   0,           0,           0,           0.2,         0.4,         0.4,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 -10 to 0 -25 to -10 
+		   0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 -10 to 0 -10 to 5   
+		   0,           0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 -10 to 0 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0.5,         0.4,         0.1,         0,           0,           0,           0,           0,            // >= 10    -10 to 0 -10 to 0 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.6,         0.3,         0.1,         0,           0,           0,           0,            // >= 10    -10 to 0 -10 to 0 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0.3,         0.6,         0.1,         0,           0,           0,           0,            // >= 10    -10 to 0 -10 to 0 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,            // >= 10    -10 to 0 -10 to 0 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.2,         0.1,         0,           0,            // >= 10    -10 to 0 -10 to 0 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.6,         0.3,         0,           0,            // >= 10    -10 to 0 -10 to 0 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.5,         0.2,         0,            // >= 10    -10 to 0 -10 to 0 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.4,         0.5,          // >= 10    -10 to 0 -10 to 0 >= 125     
+		   0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 0 to 10  -70 to -55 
+		   0,           0,           0.1,         0.5,         0.3,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 0 to 10  -55 to -40 
+		   0,           0,           0,           0.4,         0.3,         0.3,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 0 to 10  -40 to -25 
+		   0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 0 to 10  -25 to -10 
+		   0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 0 to 10  -10 to 5   
+		   0,           0,           0,           0,           0,           0.1,         0.7,         0.2,         0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 0 to 10  5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,            // >= 10    -10 to 0 0 to 10  20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,           0,           0,           0,            // >= 10    -10 to 0 0 to 10  35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,            // >= 10    -10 to 0 0 to 10  50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.7,         0.2,         0,           0,           0,            // >= 10    -10 to 0 0 to 10  65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.6,         0.1,         0,           0,            // >= 10    -10 to 0 0 to 10  80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,            // >= 10    -10 to 0 0 to 10  95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,            // >= 10    -10 to 0 0 to 10  110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.4,         0.5,          // >= 10    -10 to 0 0 to 10  >= 125     
+		   0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 10 to 20 -70 to -55 
+		   0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 10 to 20 -55 to -40 
+		   0,           0,           0,           0.1,         0.7,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 10 to 20 -40 to -25 
+		   0,           0,           0,           0,           0.4,         0.2,         0.4,         0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 10 to 20 -25 to -10 
+		   0,           0,           0,           0,           0,           0.3,         0.6,         0.1,         0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 10 to 20 -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 10 to 20 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.5,         0.4,         0.1,         0,           0,           0,           0,            // >= 10    -10 to 0 10 to 20 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.2,         0.6,         0.2,         0,           0,           0,           0,            // >= 10    -10 to 0 10 to 20 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.5,         0.2,         0,           0,           0,            // >= 10    -10 to 0 10 to 20 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,            // >= 10    -10 to 0 10 to 20 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.2,         0.2,         0,            // >= 10    -10 to 0 10 to 20 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.6,         0.3,         0,            // >= 10    -10 to 0 10 to 20 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,            // >= 10    -10 to 0 10 to 20 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.5,          // >= 10    -10 to 0 10 to 20 >= 125     
+		   0,           0,           0,           0.6,         0.3,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 >= 20    -70 to -55 
+		   0,           0,           0,           0.1,         0.7,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 >= 20    -55 to -40 
+		   0,           0,           0,           0,           0.2,         0.4,         0.1,         0.3,         0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 >= 20    -40 to -25 
+		   0,           0,           0,           0,           0,           0.3,         0.5,         0.1,         0.1,         0,           0,           0,           0,           0,            // >= 10    -10 to 0 >= 20    -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,            // >= 10    -10 to 0 >= 20    -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.2,         0.4,         0.4,         0,           0,           0,           0,           0,            // >= 10    -10 to 0 >= 20    5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.2,         0.5,         0.3,         0,           0,           0,           0,            // >= 10    -10 to 0 >= 20    20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,            // >= 10    -10 to 0 >= 20    35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.3,         0.2,         0,           0,            // >= 10    -10 to 0 >= 20    50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.4,         0.2,         0.2,         0,            // >= 10    -10 to 0 >= 20    65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.6,         0.2,         0,            // >= 10    -10 to 0 >= 20    80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.3,         0.4,          // >= 10    -10 to 0 >= 20    95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,          // >= 10    -10 to 0 >= 20    110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,          // >= 10    -10 to 0 >= 20    >= 125     
+		   0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  -10 to 0 -70 to -55 
+		   0,           0,           0,           0.9,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  -10 to 0 -55 to -40 
+		   0,           0,           0,           0.2,         0.4,         0.4,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  -10 to 0 -40 to -25 
+		   0,           0,           0,           0,           0.6,         0.3,         0.1,         0,           0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  -10 to 0 -25 to -10 
+		   0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  -10 to 0 -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  -10 to 0 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0.1,         0.6,         0.3,         0,           0,           0,           0,           0,            // >= 10    0 to 10  -10 to 0 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,            // >= 10    0 to 10  -10 to 0 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0.2,         0.6,         0.1,         0.1,         0,           0,           0,            // >= 10    0 to 10  -10 to 0 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.6,         0.1,         0.1,         0.1,         0,            // >= 10    0 to 10  -10 to 0 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,            // >= 10    0 to 10  -10 to 0 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,           0,            // >= 10    0 to 10  -10 to 0 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.3,         0.1,          // >= 10    0 to 10  -10 to 0 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.7,         0.2,          // >= 10    0 to 10  -10 to 0 >= 125     
+		   0,           0,           0.4,         0.4,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  0 to 10  -70 to -55 
+		   0,           0,           0,           0.6,         0.3,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  0 to 10  -55 to -40 
+		   0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  0 to 10  -40 to -25 
+		   0,           0,           0,           0,           0.1,         0.4,         0.4,         0.1,         0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  0 to 10  -25 to -10 
+		   0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  0 to 10  -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.5,         0.4,         0.1,         0,           0,           0,           0,           0,            // >= 10    0 to 10  0 to 10  5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.4,         0.4,         0.2,         0,           0,           0,           0,            // >= 10    0 to 10  0 to 10  20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0.1,         0.7,         0.2,         0,           0,           0,           0,            // >= 10    0 to 10  0 to 10  35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,            // >= 10    0 to 10  0 to 10  50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.4,         0.2,         0,           0,            // >= 10    0 to 10  0 to 10  65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,            // >= 10    0 to 10  0 to 10  80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.9,         0.1,         0,            // >= 10    0 to 10  0 to 10  95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,            // >= 10    0 to 10  0 to 10  110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.8,          // >= 10    0 to 10  0 to 10  >= 125     
+		   0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  10 to 20 -70 to -55 
+		   0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  10 to 20 -55 to -40 
+		   0,           0,           0,           0,           0.1,         0.8,         0.1,         0,           0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  10 to 20 -40 to -25 
+		   0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  10 to 20 -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  10 to 20 -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0,           0.8,         0.1,         0,           0.1,         0,           0,           0,            // >= 10    0 to 10  10 to 20 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.2,         0.6,         0.2,         0,           0,           0,           0,            // >= 10    0 to 10  10 to 20 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.3,         0.2,         0,           0,           0,            // >= 10    0 to 10  10 to 20 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,            // >= 10    0 to 10  10 to 20 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.7,         0.2,         0,           0,            // >= 10    0 to 10  10 to 20 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,            // >= 10    0 to 10  10 to 20 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.5,         0.2,          // >= 10    0 to 10  10 to 20 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,          // >= 10    0 to 10  10 to 20 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // >= 10    0 to 10  10 to 20 >= 125     
+		   0,           0,           0,           0.2,         0.4,         0.3,         0.1,         0,           0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  >= 20    -70 to -55 
+		   0,           0,           0,           0,           0.5,         0.4,         0,           0.1,         0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  >= 20    -55 to -40 
+		   0,           0,           0,           0,           0,           0.7,         0.2,         0.1,         0,           0,           0,           0,           0,           0,            // >= 10    0 to 10  >= 20    -40 to -25 
+		   0,           0,           0,           0,           0,           0.2,         0.6,         0,           0.2,         0,           0,           0,           0,           0,            // >= 10    0 to 10  >= 20    -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0,           0.6,         0.3,         0.1,         0,           0,           0,           0,            // >= 10    0 to 10  >= 20    -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0,           0.3,         0.5,         0.2,         0,           0,           0,           0,            // >= 10    0 to 10  >= 20    5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.5,         0.2,         0,           0,           0,            // >= 10    0 to 10  >= 20    20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.5,         0,           0.1,         0,            // >= 10    0 to 10  >= 20    35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.7,         0.1,         0,           0,            // >= 10    0 to 10  >= 20    50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.3,         0.1,         0.1,          // >= 10    0 to 10  >= 20    65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,          // >= 10    0 to 10  >= 20    80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,          // >= 10    0 to 10  >= 20    95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,          // >= 10    0 to 10  >= 20    110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // >= 10    0 to 10  >= 20    >= 125     
+		   0,           0,           0.2,         0.7,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    10 to 20 -10 to 0 -70 to -55 
+		   0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    10 to 20 -10 to 0 -55 to -40 
+		   0,           0,           0,           0,           0.8,         0.1,         0.1,         0,           0,           0,           0,           0,           0,           0,            // >= 10    10 to 20 -10 to 0 -40 to -25 
+		   0,           0,           0,           0,           0,           0.8,         0.1,         0,           0.1,         0,           0,           0,           0,           0,            // >= 10    10 to 20 -10 to 0 -25 to -10 
+		   0,           0,           0,           0,           0,           0.1,         0.8,         0.1,         0,           0,           0,           0,           0,           0,            // >= 10    10 to 20 -10 to 0 -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.4,         0.4,         0.2,         0,           0,           0,           0,           0,            // >= 10    10 to 20 -10 to 0 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.5,         0.4,         0.1,         0,           0,           0,           0,            // >= 10    10 to 20 -10 to 0 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.2,         0.1,         0,           0,           0,            // >= 10    10 to 20 -10 to 0 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,            // >= 10    10 to 20 -10 to 0 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,            // >= 10    10 to 20 -10 to 0 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.3,         0.5,         0.1,         0,            // >= 10    10 to 20 -10 to 0 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.5,         0.2,         0.1,          // >= 10    10 to 20 -10 to 0 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.5,         0.2,          // >= 10    10 to 20 -10 to 0 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,          // >= 10    10 to 20 -10 to 0 >= 125     
+		   0,           0,           0,           0.5,         0.4,         0.1,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    10 to 20 0 to 10  -70 to -55 
+		   0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    10 to 20 0 to 10  -55 to -40 
+		   0,           0,           0,           0,           0.5,         0.5,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    10 to 20 0 to 10  -40 to -25 
+		   0,           0,           0,           0,           0,           0.7,         0.2,         0.1,         0,           0,           0,           0,           0,           0,            // >= 10    10 to 20 0 to 10  -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,           0,           0,            // >= 10    10 to 20 0 to 10  -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.1,         0.5,         0.4,         0,           0,           0,           0,           0,            // >= 10    10 to 20 0 to 10  5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,            // >= 10    10 to 20 0 to 10  20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,            // >= 10    10 to 20 0 to 10  35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.2,         0,           0.1,         0,            // >= 10    10 to 20 0 to 10  50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.6,         0.2,         0,           0.1,          // >= 10    10 to 20 0 to 10  65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.8,         0.1,         0,            // >= 10    10 to 20 0 to 10  80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.3,         0.2,          // >= 10    10 to 20 0 to 10  95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.2,         0.6,          // >= 10    10 to 20 0 to 10  110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // >= 10    10 to 20 0 to 10  >= 125     
+		   0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    10 to 20 10 to 20 -70 to -55 
+		   0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    10 to 20 10 to 20 -55 to -40 
+		   0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,           0,            // >= 10    10 to 20 10 to 20 -40 to -25 
+		   0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,            // >= 10    10 to 20 10 to 20 -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,           0,           0,            // >= 10    10 to 20 10 to 20 -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,            // >= 10    10 to 20 10 to 20 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.3,         0.1,         0,           0,           0,            // >= 10    10 to 20 10 to 20 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.5,         0.2,         0.1,         0,           0,            // >= 10    10 to 20 10 to 20 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.6,         0.2,         0,           0,            // >= 10    10 to 20 10 to 20 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,            // >= 10    10 to 20 10 to 20 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.2,         0.1,          // >= 10    10 to 20 10 to 20 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,          // >= 10    10 to 20 10 to 20 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,          // >= 10    10 to 20 10 to 20 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // >= 10    10 to 20 10 to 20 >= 125     
+		   0,           0,           0,           0,           0.4,         0.5,         0,           0.1,         0,           0,           0,           0,           0,           0,            // >= 10    10 to 20 >= 20    -70 to -55 
+		   0,           0,           0,           0,           0,           0.7,         0,           0.2,         0.1,         0,           0,           0,           0,           0,            // >= 10    10 to 20 >= 20    -55 to -40 
+		   0,           0,           0,           0,           0,           0.1,         0.5,         0.3,         0.1,         0,           0,           0,           0,           0,            // >= 10    10 to 20 >= 20    -40 to -25 
+		   0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,           0,           0,            // >= 10    10 to 20 >= 20    -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0,           0.4,         0.5,         0.1,         0,           0,           0,           0,            // >= 10    10 to 20 >= 20    -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0,           0.1,         0.7,         0.1,         0.1,         0,           0,           0,            // >= 10    10 to 20 >= 20    5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.4,         0.4,         0.1,         0,           0,            // >= 10    10 to 20 >= 20    20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.4,         0.4,         0,           0,            // >= 10    10 to 20 >= 20    35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.5,         0.4,         0.1,         0,            // >= 10    10 to 20 >= 20    50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,           0,           0,            // >= 10    10 to 20 >= 20    65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.5,         0.2,          // >= 10    10 to 20 >= 20    80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,          // >= 10    10 to 20 >= 20    95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // >= 10    10 to 20 >= 20    110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // >= 10    10 to 20 >= 20    >= 125     
+		   0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    >= 20    -10 to 0 -70 to -55 
+		   0,           0,           0,           0.1,         0.5,         0.4,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    >= 20    -10 to 0 -55 to -40 
+		   0,           0,           0,           0,           0.2,         0.8,         0,           0,           0,           0,           0,           0,           0,           0,            // >= 10    >= 20    -10 to 0 -40 to -25 
+		   0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,           0,           0,            // >= 10    >= 20    -10 to 0 -25 to -10 
+		   0,           0,           0,           0,           0,           0.1,         0.5,         0.4,         0,           0,           0,           0,           0,           0,            // >= 10    >= 20    -10 to 0 -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0.1,         0.6,         0.3,         0,           0,           0,           0,           0,            // >= 10    >= 20    -10 to 0 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,         0,           0,           0,           0,           0,            // >= 10    >= 20    -10 to 0 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.7,         0,           0,           0,           0,            // >= 10    >= 20    -10 to 0 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.2,         0.1,         0,           0,            // >= 10    >= 20    -10 to 0 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,            // >= 10    >= 20    -10 to 0 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.6,         0.1,         0.1,          // >= 10    >= 20    -10 to 0 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.4,         0.3,          // >= 10    >= 20    -10 to 0 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,          // >= 10    >= 20    -10 to 0 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,          // >= 10    >= 20    -10 to 0 >= 125     
+		   0,           0,           0,           0.3,         0.4,         0.1,         0.2,         0,           0,           0,           0,           0,           0,           0,            // >= 10    >= 20    0 to 10  -70 to -55 
+		   0,           0,           0,           0,           0.2,         0.3,         0.4,         0.1,         0,           0,           0,           0,           0,           0,            // >= 10    >= 20    0 to 10  -55 to -40 
+		   0,           0,           0,           0,           0,           0.6,         0.3,         0.1,         0,           0,           0,           0,           0,           0,            // >= 10    >= 20    0 to 10  -40 to -25 
+		   0,           0,           0,           0,           0,           0,           0.7,         0.2,         0.1,         0,           0,           0,           0,           0,            // >= 10    >= 20    0 to 10  -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0.1,         0.7,         0.2,         0,           0,           0,           0,           0,            // >= 10    >= 20    0 to 10  -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0,           0.5,         0.4,         0.1,         0,           0,           0,           0,            // >= 10    >= 20    0 to 10  5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.3,         0,           0,           0,           0,            // >= 10    >= 20    0 to 10  20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.8,         0.1,         0,           0,           0,            // >= 10    >= 20    0 to 10  35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.4,         0.2,         0.1,         0,            // >= 10    >= 20    0 to 10  50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.6,         0.2,         0,            // >= 10    >= 20    0 to 10  65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.4,         0,            // >= 10    >= 20    0 to 10  80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.2,         0.5,          // >= 10    >= 20    0 to 10  95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,          // >= 10    >= 20    0 to 10  110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // >= 10    >= 20    0 to 10  >= 125     
+		   0,           0,           0,           0,           0.4,         0.4,         0.2,         0,           0,           0,           0,           0,           0,           0,            // >= 10    >= 20    10 to 20 -70 to -55 
+		   0,           0,           0,           0,           0,           0.6,         0.4,         0,           0,           0,           0,           0,           0,           0,            // >= 10    >= 20    10 to 20 -55 to -40 
+		   0,           0,           0,           0,           0,           0.2,         0.5,         0.2,         0.1,         0,           0,           0,           0,           0,            // >= 10    >= 20    10 to 20 -40 to -25 
+		   0,           0,           0,           0,           0,           0,           0.3,         0.6,         0.1,         0,           0,           0,           0,           0,            // >= 10    >= 20    10 to 20 -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0,           0.4,         0.4,         0.1,         0.1,         0,           0,           0,            // >= 10    >= 20    10 to 20 -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0,           0.1,         0.4,         0.3,         0.1,         0.1,         0,           0,            // >= 10    >= 20    10 to 20 5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.6,         0.1,         0,           0,           0,            // >= 10    >= 20    10 to 20 20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.6,         0.2,         0,           0,            // >= 10    >= 20    10 to 20 35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.3,         0.5,         0,           0,            // >= 10    >= 20    10 to 20 50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.2,         0.1,          // >= 10    >= 20    10 to 20 65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.3,         0.4,         0.3,          // >= 10    >= 20    10 to 20 80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.6,          // >= 10    >= 20    10 to 20 95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // >= 10    >= 20    10 to 20 110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // >= 10    >= 20    10 to 20 >= 125     
+		   0,           0,           0,           0,           0.1,         0.2,         0.4,         0.2,         0.1,         0,           0,           0,           0,           0,            // >= 10    >= 20    >= 20    -70 to -55 
+		   0,           0,           0,           0,           0,           0.1,         0.4,         0.3,         0.2,         0,           0,           0,           0,           0,            // >= 10    >= 20    >= 20    -55 to -40 
+		   0,           0,           0,           0,           0,           0,           0.3,         0.5,         0.1,         0.1,         0,           0,           0,           0,            // >= 10    >= 20    >= 20    -40 to -25 
+		   0,           0,           0,           0,           0,           0,           0,           0.8,         0.2,         0,           0,           0,           0,           0,            // >= 10    >= 20    >= 20    -25 to -10 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.6,         0.1,         0.2,         0.1,         0,           0,            // >= 10    >= 20    >= 20    -10 to 5   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.9,         0,           0,           0,           0,            // >= 10    >= 20    >= 20    5 to 20    
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0.4,         0.2,         0.4,         0,           0,            // >= 10    >= 20    >= 20    20 to 35   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.7,         0.2,         0,           0.1,          // >= 10    >= 20    >= 20    35 to 50   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.2,         0.6,         0.1,          // >= 10    >= 20    >= 20    50 to 65   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.2,         0.2,         0.6,          // >= 10    >= 20    >= 20    65 to 80   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0.1,         0.2,         0.7,          // >= 10    >= 20    >= 20    80 to 95   
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // >= 10    >= 20    >= 20    95 to 110  
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1,            // >= 10    >= 20    >= 20    110 to 125 
+		   0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           0,           1);           // >= 10    >= 20    >= 20    >= 125     ;
+	numcases = 10;
+	equation = "rta (as, odt, drq, sat) = as + odt + sat + drq";
+	title = "Runaway Time\nof Arrival";
+	whenchanged = 1450056064;
+	belief = (0, 0, 0, 6.00601e-5, 0.008918034, 0.1863172, 0.5070342, 0.24896, 0.03626508, 0.009695863, 0.002204489, 4.992646e-4, 4.025802e-5, 5.596398e-6);
+	visual V1 {
+		center = (1098, 1296);
+		height = 5;
+		link 3 {
+			path = ((1476, 848), (1235, 1135));
+			};
+		};
+	};
+NodeSet Predispositions {Nodes = (t);};
+NodeSet Diseases {Nodes = (pt, sat, dg, pag);};
+NodeSet Symptoms {Nodes = ();};
+NodeSet ClearDocumentation {Nodes = ();};
+NodeSet target {Nodes = (pt, dg, pag);};
+ElimOrder = (t, dg, pag, pt, as, odt, drq, sat, rta);
+};
